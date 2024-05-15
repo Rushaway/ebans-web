@@ -54,9 +54,23 @@
     $steamID32 = $steam->SteamID64_To_SteamID($steamID64);
 
     $admin = new Admin();
-    if($admin->IsLoginValid($steamID32, $secret_key)) {
+    if($admin->IsLoginValid($steamID32, $secret_key, true)) {
         setcookie('steamID', $steamID32, (time() * 30), "/", $_SERVER['SERVER_NAME'], true, true);
         setcookie("secret_key", $secret_key, (time() * 30), "/", $_SERVER['SERVER_NAME'], true, true);
+
+        // Create an unique cookie based on sbpp aid for each user
+        // Aid is the safer option to use as a cookie since it does not have any personal information
+        $sql = "SELECT aid FROM sb_admins WHERE authid = ?";
+        $stmt = $GLOBALS['SBPP']->prepare($sql);
+        $stmt->bind_param("s", $steamID32);
+        $stmt->execute();
+        $queryResult = $stmt->get_result();
+        $stmt->close();
+
+        $row = $queryResult->fetch_assoc();
+        $aid = $row['aid'];
+
+        setcookie("aid", $aid, (time() * 30), "/", $_SERVER['SERVER_NAME'], true, true);
     }
 
     $server_host_url = (!empty($_SERVER['HTTPS']) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];

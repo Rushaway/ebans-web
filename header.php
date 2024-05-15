@@ -17,6 +17,7 @@
     } else {
 		setcookie("steamID", "", 1, "/", $_SERVER['SERVER_NAME'], true, true);
 		setcookie("secret_key", "", 1, "/", $_SERVER['SERVER_NAME'], true, true);
+		setcookie("aid", "", 1, "/", $_SERVER['SERVER_NAME'], true, true);
 	}
 ?>
 
@@ -76,7 +77,7 @@
 <header>
     <div class="header1">
         <div class="header1-icons">
-        <?php echo '<a id="steam_group" target="_blank" href="'. $GLOBALS['STEAM_GROUP'] .'" rel="noopener" title="Our Steam Group">' ?>
+            <?php echo '<a id="steam_group" target="_blank" href="'. $GLOBALS['STEAM_GROUP'] .'" rel="noopener" title="Our Steam Group">' ?>
                 <i class="fab fa-steam-symbol"></i>
             </a>
             <a id="discord" target="_blank" href="https://discord.gg/XhByCBg" rel="noopener" data-ipstooltip="" _title="Join us on Discord">

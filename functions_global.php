@@ -44,8 +44,22 @@
             return "<i>Admin Deleted</i>";
     }
         
-        public function IsLoginValid($steamID, $secret_key) {
+        public function IsLoginValid($steamID, $secret_key, $bInitialVerification) {
          if (empty($steamID) || empty($secret_key) || $secret_key !== $GLOBALS['SECRET_KEY']) {
+            return false;
+        }
+
+        $sql = "SELECT aid FROM sb_admins WHERE authid = ?";
+        $stmt = $GLOBALS['SBPP']->prepare($sql);
+        $stmt->bind_param("s", $steamID);
+        $stmt->execute();
+        $queryResult = $stmt->get_result();
+        $stmt->close();
+
+        $row = $queryResult->fetch_assoc();
+        $sbppaid = $row['aid'];
+
+        if (!$bInitialVerification && $sbppaid != $_COOKIE['aid']) {
             return false;
         }
 
@@ -74,7 +88,7 @@
 
         public function UpdateAdminInfo($steamID) {
             $secret_key = $_COOKIE['secret_key'];
-            if (!$this->IsLoginValid($steamID, $secret_key)) {
+            if (!$this->IsLoginValid($steamID, $secret_key, false)) {
                 return false;
             }
 
@@ -441,7 +455,7 @@
         $secret_key = $_COOKIE['secret_key'];
 
         $admin = new Admin();
-        if($admin->IsLoginValid($steamID, $secret_key)) {
+        if($admin->IsLoginValid($steamID, $secret_key, false)) {
             return true;
         }
 
