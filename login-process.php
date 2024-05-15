@@ -41,6 +41,7 @@
     }
 
     $steam_api_key = $GLOBALS['STEAM_API_KEY'];
+    $secret_key = $GLOBALS['SECRET_KEY'];
 
     $response = file_get_contents('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key='.$steam_api_key.'&steamids='.$steamID64);
     $response = json_decode($response,true);
@@ -53,8 +54,9 @@
     $steamID32 = $steam->SteamID64_To_SteamID($steamID64);
 
     $admin = new Admin();
-    if($admin->IsLoginValid($steamID32)) {
-        setcookie('steamID', $steamID32, (time() * 30));
+    if($admin->IsLoginValid($steamID32, $secret_key)) {
+        setcookie('steamID', $steamID32, (time() * 30), "/", $_SERVER['SERVER_NAME'], true, true);
+        setcookie("secret_key", $secret_key, (time() * 30), "/", $_SERVER['SERVER_NAME'], true, true);
     }
 
     $server_host_url = (!empty($_SERVER['HTTPS']) ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'];
