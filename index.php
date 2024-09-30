@@ -202,9 +202,9 @@
                                         }
 
                                         $count = 0;
-										$realcount = 0;
+                                        $realcount = 0;
                                         $count = $Eban->GetEbansNumber($clientSteamID);
-										$realcount = $Eban->GetRealEbansNumber($clientSteamID);
+                                        $realcount = $Eban->GetRealEbansNumber($clientSteamID);
 
                                         $dateA->setTimestamp(($timestamp_issued - ($duration * 60)));
                                         $dateB = $dateA->format(DATE_TIME_FORMAT);
