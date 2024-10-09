@@ -3,26 +3,26 @@ name: Lint
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-lint:
-  name: Lint
-  runs-on: ubuntu-20.04
-  steps:
-    - name: Code Checkout
-      uses: actions/checkout@v3
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: "8.3"
-        extensions: bcmath, curl, gd, mbstring, mysql, openssl, pdo, tokenizer, xml, zip
-        tools: composer:v2
-        coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: bcmath, curl, gd, mbstring, mysql, openssl, pdo, tokenizer, xml, zip
+          tools: composer:v2
+          coverage: none
 
-    - name: Setup .env
-      run: cp .env.ci .env
+      - name: Setup .env
+        run: cp .env.ci .env
 
-    - name: Install dependencies
-      run: composer install --no-interaction --no-progress --no-suggest --prefer-dist
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist
 
-    - name: PHP CS Fixer
-      run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
